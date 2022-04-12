@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/3mstecnologia/Busca_Info_Nobreak#readme",
   "dependencies": {
-    "axios": "^0.26.1"
+    "axios": "^0.26.1",
+    "react-hook-form": "^7.29.0"
   }
 }
