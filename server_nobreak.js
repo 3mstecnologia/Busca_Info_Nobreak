@@ -3,17 +3,17 @@ require('dotenv').config()
 
 const contatos = [
     "49999184629",
-    //"49991108888",//49991108888
-    //"49984030021"//49984030021
+    "49991108888",//GORDO
+    "49984030021"//CARRARO
 ];
 const config_nobreaks =   [
     ["10443", 'no-break01', contatos],
     ["10434", 'no-break02', contatos]
 ];
+const nivel_bateria = 98 //Parametro que define o nivel da bateria que irá começar a notificar
 
-
-var auth = ''
-var battery = ''
+//var auth = ''
+//var battery = ''
 
 const url = process.env.URL_ZABBIX
 
@@ -26,12 +26,13 @@ config_nobreaks.forEach(item => {
             item[2].forEach(contato => {
                 let capacidade = response.data.result[0].lastvalue
                 //console.log(capacidade)
-                if(capacidade <= 98){
+                if(capacidade <= nivel_bateria){
                     //console.log(item[0])
                     busca_voltage(url, auth, item)
                     .then((response) => {
                         //console.log(response.data.result[0].lastvalue);
-                        if(response.data.result[0].lastvalue == "0"){ // Valida se a entrada de eneria está zerada, se estiver envia mensagem
+                        if(response.data.result[0].lastvalue != "0"){ // Valida se a entrada de eneria está zerada, se estiver envia mensagem
+                            console.log("Alerta!")
                             var mensagem = "ALERTA!!!\nNivel do nobreak "+ item[1] +": " + capacidade +"%";
                             var destino = contato
                             enviarmensagem(destino, mensagem)
