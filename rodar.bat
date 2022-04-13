@@ -1,5 +1,5 @@
 @echo off
 :a
 node server_nobreak.js
-timeout 1800
+timeout 60
 goto a

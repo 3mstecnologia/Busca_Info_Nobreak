@@ -1,0 +1,2 @@
+URL_ZABBIX=http://10.3.0.34/zabbix/api_jsonrpc.php
+URL_ENVIA_MENSAGEM=http://172.16.248.106:8000/enviarmensagemjson
