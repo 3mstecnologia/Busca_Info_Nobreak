@@ -24,12 +24,15 @@ config_nobreaks.forEach(item => {
         .then((response) => {
             //console.log(response.data.result[0].lastvalue);
             item[2].forEach(contato => {
-                if(response.data.result[0].lastvalue <= 98){
-                    busca_voltage(url, auth, item[0])
+                let capacidade = response.data.result[0].lastvalue
+                //console.log(capacidade)
+                if(capacidade <= 98){
+                    //console.log(item[0])
+                    busca_voltage(url, auth, item)
                     .then((response) => {
                         //console.log(response.data.result[0].lastvalue);
                         if(response.data.result[0].lastvalue == "0"){ // Valida se a entrada de eneria está zerada, se estiver envia mensagem
-                            var mensagem = "ALERTA!!!\mNivel do nobreak "+ item[1] +": " + response.data.result[0].lastvalue +"%";
+                            var mensagem = "ALERTA!!!\nNivel do nobreak "+ item[1] +": " + capacidade +"%";
                             var destino = contato
                             enviarmensagem(destino, mensagem)
                         }
@@ -84,14 +87,15 @@ async function busca_battery_capacity(url_zabbix, auth, id_nobreak) {
 }
 
 async function busca_voltage(url_zabbix, auth, id_nobreak) {
+    //console.log(id_nobreak[0]+"-------")
     var voltagem =  await axios.post(url_zabbix, {
         jsonrpc: "2.0",
         method: "item.get",
         params: {
             output: "extend",
-            hostids: id_nobreak,
+            hostids: id_nobreak[0],
             search: {
-                key_: "upsAdvOutputVoltage",
+                key_: "upsAdvInputVoltage",
             },
             sortfield: "name"
         },
