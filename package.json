@@ -19,6 +19,7 @@
   "dependencies": {
     "axios": "^0.26.1",
     "dotenv": "^16.0.0",
-    "react-hook-form": "^7.29.0"
+    "react-hook-form": "^7.29.0",
+    "string-progressbar": "^1.0.4"
   }
 }

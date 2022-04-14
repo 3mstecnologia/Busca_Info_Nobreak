@@ -1,5 +1,6 @@
 const axios = require('axios');
 require('dotenv').config()
+const progressbar = require('string-progressbar');
 
 const contatos = [
     "49999184629",
@@ -7,8 +8,8 @@ const contatos = [
     "49984030021"//CARRARO
 ];
 const config_nobreaks =   [
-    ["10443", 'no-break01', contatos],
-    ["10434", 'no-break02', contatos]
+    ["10443", 'no-break02', contatos],
+    ["10434", 'no-break01', contatos]
 ];
 const nivel_bateria = 98 //Parametro que define o nivel da bateria que irá começar a notificar
 
@@ -16,6 +17,8 @@ const nivel_bateria = 98 //Parametro que define o nivel da bateria que irá come
 //var battery = ''
 
 const url = process.env.URL_ZABBIX
+
+
 
 config_nobreaks.forEach(item => {
     autentica(url).then((response) => {
@@ -26,14 +29,34 @@ config_nobreaks.forEach(item => {
             item[2].forEach(contato => {
                 let capacidade = response.data.result[0].lastvalue
                 //console.log(capacidade)
-                if(capacidade <= nivel_bateria){
+                if(capacidade <= nivel_bateria){// '<=' -----------------------------
                     //console.log(item[0])
                     busca_voltage(url, auth, item)
                     .then((response) => {
                         //console.log(response.data.result[0].lastvalue);
-                        if(response.data.result[0].lastvalue != "0"){ // Valida se a entrada de eneria está zerada, se estiver envia mensagem
+                        if(response.data.result[0].lastvalue != "0"){//!= ALTERAR -----------------------------
+                            var total = 100;
+                            var current = capacidade;
+                            // First two arguments are mandatory
+
+                            let barra = progressbar.splitBar(total, current, [10])
+                            barra = barra.toString()
+                            
+                            // Returns: Array<String, String>
+                            var mensagem = "*ENERGIA LIDAGA*\n"+ "```" +item[1]+"```" +"\nCarregando :\n"+ barra + "%";
+                            console.log(mensagem)
+                            var destino = contato
+                            enviarmensagem(destino, mensagem)
+                        }else if(response.data.result[0].lastvalue == "0"){ // Valida se a entrada de eneria está zerada, se estiver envia mensagem
                             console.log("Alerta!")
-                            var mensagem = "ALERTA!!!\nNivel do nobreak "+ item[1] +": " + capacidade +"%";
+                            var total = 100;
+                            var current = capacidade;
+                            // First two arguments are mandatory
+
+                            let barra = progressbar.splitBar(total, current, [10])
+                            barra = barra.toString()
+
+                            var mensagem = "*ALERTA!!!*\n```Sem energia```\n" + "```" +item[1]+"```" +"\n" + barra +"%";
                             var destino = contato
                             enviarmensagem(destino, mensagem)
                         }
