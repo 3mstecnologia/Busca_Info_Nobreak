@@ -5,7 +5,8 @@ const progressbar = require('string-progressbar');
 const contatos = [
     "49999184629",
     "49991108888",//GORDO
-    "49984030021"//CARRARO
+    "49984030021",//CARRARO
+    "49999502814" //VILMAR
 ];
 const config_nobreaks =   [
     ["10443", 'no-break02', contatos],
